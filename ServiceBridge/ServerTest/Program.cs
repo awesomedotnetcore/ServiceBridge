@@ -13,11 +13,11 @@ namespace ServerTest
     {
         static void Main(string[] args)
         {
-            Lib.distributed.zookeeper.ServiceManager.ServiceRegister reg = null;
+            ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister reg = null;
             try
             {
-                Lib.rpc.ServiceHostManager.StartService("http://localhost:10000/", typeof(Program).Assembly);
-                reg = new Lib.distributed.zookeeper.ServiceManager.ServiceRegister("es.qipeilong.net:2181");
+                ServiceBridge.rpc.ServiceHostManager.StartService("http://localhost:10000/", typeof(Program).Assembly);
+                reg = new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister("es.qipeilong.net:2181");
                 Console.WriteLine("服务已经启动，按任意键退出");
                 Console.ReadLine();
             }
@@ -28,7 +28,7 @@ namespace ServerTest
             finally
             {
                 reg?.Dispose();
-                Lib.rpc.ServiceHostManager.DisposeService();
+                ServiceBridge.rpc.ServiceHostManager.DisposeService();
             }
         }
     }

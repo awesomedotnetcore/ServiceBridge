@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServerTest
 {
-    [Lib.rpc.ServiceContractImpl]
+    [ServiceBridge.rpc.ServiceContractImpl]
     public class UserServiceImpl : Wcf.Contract.IUserService
     {
         public string GetUserName(string uid) => $"username for uid:{uid}";

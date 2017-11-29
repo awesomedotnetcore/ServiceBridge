@@ -11,11 +11,11 @@ namespace ClientTest
     /// </summary>
     class Program
     {
-        private static readonly Lazy<Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe> sub =
-            new Lazy<Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe>(() =>
-            new Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe("es.qipeilong.net:2181"));
+        private static readonly Lazy<ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe> sub =
+            new Lazy<ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe>(() =>
+            new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe("es.qipeilong.net:2181"));
 
-        class UserServiceClient : Lib.rpc.ServiceClient<Wcf.Contract.IUserService>
+        class UserServiceClient : ServiceBridge.rpc.ServiceClient<Wcf.Contract.IUserService>
         {
             public UserServiceClient() : base(sub.Value.ResolveSvc<Wcf.Contract.IUserService>())
             { }
@@ -23,7 +23,7 @@ namespace ClientTest
 
         static void Main(string[] args)
         {
-            foreach (var i in Lib.helper.Com.Range(100))
+            foreach (var i in ServiceBridge.helper.Com.Range(100))
             {
                 while (sub.Value.Resolve<Wcf.Contract.IUserService>() == null)
                 {
