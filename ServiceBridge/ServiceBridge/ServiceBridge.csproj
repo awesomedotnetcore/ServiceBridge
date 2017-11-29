@@ -61,9 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="core\ResultBase.cs" />
-    <Compile Include="core\StaticData.cs" />
-    <Compile Include="core\StepLog.cs" />
     <Compile Include="core\StoreInstanceDict.cs" />
     <Compile Include="data\SerializeBase.cs" />
     <Compile Include="distributed\CrossProcessLock.cs" />
@@ -101,7 +98,6 @@
     <Compile Include="helper\Com.cs" />
     <Compile Include="helper\ConvertHelper.cs" />
     <Compile Include="helper\DateTimeHelper.cs" />
-    <Compile Include="helper\GeoHelper.cs" />
     <Compile Include="helper\JsonHelper.cs" />
     <Compile Include="helper\LogHelper.cs" />
     <Compile Include="helper\MapperHelper.cs" />

@@ -24,6 +24,9 @@ namespace Lib.distributed.zookeeper.ServiceManager
             if (ValidateHelper.IsPlumpList(list))
             {
                 var theone = this._ran.Choice(list);
+                //
+                //根据权重选择
+                //this._ran.ChoiceByWeight(list, x => x.Weight);
                 Console.WriteLine($"选择了地址：{theone.Url}");
                 return theone;
             }

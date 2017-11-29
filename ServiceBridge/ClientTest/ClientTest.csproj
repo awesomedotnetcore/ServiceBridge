@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +48,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceBridge\ServiceBridge.csproj">
+      <Project>{e1474d26-3cf6-4323-84fd-ffe1cf503274}</Project>
+      <Name>ServiceBridge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wcf.Contract\Wcf.Contract.csproj">
+      <Project>{bf00d4b7-f2d2-483e-b94b-7ef8f64c09ca}</Project>
+      <Name>Wcf.Contract</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
