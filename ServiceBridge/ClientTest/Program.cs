@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace ClientTest
 {
+    /// <summary>
+    /// 客户端只要配置zk地址
+    /// </summary>
     class Program
     {
-        private static readonly Lazy<Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe> sub = new Lazy<Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe>(() => new Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe("es.qipeilong.net:2181"));
+        private static readonly Lazy<Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe> sub =
+            new Lazy<Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe>(() =>
+            new Lib.distributed.zookeeper.ServiceManager.ServiceSubscribe("es.qipeilong.net:2181"));
 
         class UserServiceClient : Lib.rpc.ServiceClient<Wcf.Contract.IUserService>
         {
