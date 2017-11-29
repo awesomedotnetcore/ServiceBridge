@@ -1,4 +1,4 @@
-﻿using Lib.helper;
+﻿using ServiceBridge.helper;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,7 +6,7 @@ using System.Web;
 using System.Linq;
 using System.Diagnostics;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     [Serializable]
     public class LogTarget

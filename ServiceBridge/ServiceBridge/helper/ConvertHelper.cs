@@ -7,9 +7,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using Lib.extension;
+using ServiceBridge.extension;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 类型帮助类

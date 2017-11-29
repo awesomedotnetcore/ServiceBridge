@@ -1,14 +1,14 @@
-﻿using Lib.helper;
+﻿using ServiceBridge.helper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
+using ServiceBridge.extension;
 using System.Globalization;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     public static class DateTimeHelper
     {

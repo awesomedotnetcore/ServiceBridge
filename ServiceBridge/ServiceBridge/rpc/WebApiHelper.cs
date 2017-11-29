@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
-using Lib.helper;
-using Lib.core;
+using ServiceBridge.extension;
+using ServiceBridge.helper;
+using ServiceBridge.core;
 using Polly;
 
-namespace Lib.rpc
+namespace ServiceBridge.rpc
 {
     public class ServerSetting
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     public static class EnumExtension
     {

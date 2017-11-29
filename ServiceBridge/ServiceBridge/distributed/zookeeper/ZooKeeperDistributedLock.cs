@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
+using ServiceBridge.extension;
 using System.Threading;
 using System.Diagnostics;
-using Lib.helper;
+using ServiceBridge.helper;
 using Polly;
 using Polly.Retry;
 using org.apache.zookeeper;
 
-namespace Lib.distributed.zookeeper
+namespace ServiceBridge.distributed.zookeeper
 {
     /// <summary>
     /// key节点不会被删除

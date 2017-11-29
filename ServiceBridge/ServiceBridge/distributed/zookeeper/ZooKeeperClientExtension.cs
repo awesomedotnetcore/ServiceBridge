@@ -5,19 +5,19 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Threading;
 using org.apache.zookeeper;
-using Lib.extension;
-using Lib.helper;
-using Lib.data;
-using Lib.core;
+using ServiceBridge.extension;
+using ServiceBridge.helper;
+using ServiceBridge.data;
+using ServiceBridge.core;
 using System.Threading.Tasks;
 using static org.apache.zookeeper.ZooDefs;
 using org.apache.zookeeper.data;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Lib.rpc;
+using ServiceBridge.rpc;
 
-namespace Lib.distributed.zookeeper
+namespace ServiceBridge.distributed.zookeeper
 {
     public static class ZooKeeperClientExtension
     {

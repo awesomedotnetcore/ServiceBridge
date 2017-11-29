@@ -8,7 +8,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 字符串帮助类

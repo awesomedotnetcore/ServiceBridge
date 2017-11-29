@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using org.apache.zookeeper;
 
-namespace Lib.distributed.zookeeper.watcher
+namespace ServiceBridge.distributed.zookeeper.watcher
 {
     public class NodeMonitorWatcher : WatcherBase
     {

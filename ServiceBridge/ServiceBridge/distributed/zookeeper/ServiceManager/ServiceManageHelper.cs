@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Polly;
-using Lib.extension;
+using ServiceBridge.extension;
 
-namespace Lib.distributed.zookeeper.ServiceManager
+namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
     public static class ServiceManageHelper
     {

@@ -1,5 +1,5 @@
-﻿using Lib.core;
-using Lib.helper;
+﻿using ServiceBridge.core;
+using ServiceBridge.helper;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     /// <summary>
     /// 对Linq的扩展

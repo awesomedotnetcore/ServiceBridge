@@ -4,12 +4,12 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
+using ServiceBridge.extension;
 using System.Reflection;
 using System.ServiceModel.Description;
-using Lib.helper;
+using ServiceBridge.helper;
 
-namespace Lib.rpc
+namespace ServiceBridge.rpc
 {
     /// <summary>
     /// self host wcf

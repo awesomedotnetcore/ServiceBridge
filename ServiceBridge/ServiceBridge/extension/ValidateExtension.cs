@@ -1,10 +1,10 @@
-﻿using Lib.data;
-using Lib.helper;
+﻿using ServiceBridge.data;
+using ServiceBridge.helper;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     /// <summary>
     /// ValidateExtension

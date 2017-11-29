@@ -1,4 +1,4 @@
-﻿using Lib.core;
+﻿using ServiceBridge.core;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 公共方法类

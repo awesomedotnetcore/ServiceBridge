@@ -1,12 +1,12 @@
-﻿using Lib.extension;
-using Lib.helper;
+﻿using ServiceBridge.extension;
+using ServiceBridge.helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.distributed.zookeeper.ServiceManager
+namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
     public abstract class ServiceSubscribeBase : ServiceManageBase
     {

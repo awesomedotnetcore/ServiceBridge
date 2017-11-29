@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 同步调用异步async防止死锁方案

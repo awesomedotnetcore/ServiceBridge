@@ -1,4 +1,4 @@
-﻿using Lib.core;
+﻿using ServiceBridge.core;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 映射，推荐使用更专业的组件，比如AutoMapper

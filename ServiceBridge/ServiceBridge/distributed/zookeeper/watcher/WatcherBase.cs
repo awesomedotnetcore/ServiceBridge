@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
+using ServiceBridge.extension;
 
-namespace Lib.distributed.zookeeper.watcher
+namespace ServiceBridge.distributed.zookeeper.watcher
 {
     public abstract class WatcherBase : Watcher
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lib.distributed
+namespace ServiceBridge.distributed
 {
     public interface IDistributedLock : IDisposable
     {

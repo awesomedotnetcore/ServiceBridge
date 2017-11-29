@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.distributed.zookeeper.ServiceManager
+namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
     public class AddressModel
     {

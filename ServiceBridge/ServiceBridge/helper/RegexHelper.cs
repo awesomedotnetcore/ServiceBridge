@@ -5,7 +5,7 @@ using System.Web;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 正则表达式公共类

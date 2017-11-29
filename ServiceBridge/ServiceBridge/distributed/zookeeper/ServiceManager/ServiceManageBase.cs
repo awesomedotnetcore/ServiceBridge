@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.distributed;
-using Lib.distributed.zookeeper;
+using ServiceBridge.distributed;
+using ServiceBridge.distributed.zookeeper;
 using System.Reflection;
-using Lib.extension;
+using ServiceBridge.extension;
 using Polly;
-using Lib.core;
-using Lib.data;
-using Lib.helper;
+using ServiceBridge.core;
+using ServiceBridge.data;
+using ServiceBridge.helper;
 
-namespace Lib.distributed.zookeeper.ServiceManager
+namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
     /// <summary>
     /// /QPL/WCF/ORDER/m-1

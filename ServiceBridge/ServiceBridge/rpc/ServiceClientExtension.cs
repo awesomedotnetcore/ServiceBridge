@@ -5,8 +5,8 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.helper;
-using Lib.extension;
+using ServiceBridge.helper;
+using ServiceBridge.extension;
 using System.ServiceModel.Channels;
 using System.Configuration;
 using System.IO;
@@ -14,7 +14,7 @@ using System.Web;
 using System.Reflection;
 using System.ServiceModel.Description;
 
-namespace Lib.rpc
+namespace ServiceBridge.rpc
 {
     /// <summary>
     /// 请求客户端扩展

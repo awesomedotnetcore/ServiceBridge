@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
+using ServiceBridge.extension;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Lib.data
+namespace ServiceBridge.data
 {
     /// <summary>
     /// redis基类，实现序列化和反序列化

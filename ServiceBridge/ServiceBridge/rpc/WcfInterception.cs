@@ -5,8 +5,8 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.helper;
-using Lib.extension;
+using ServiceBridge.helper;
+using ServiceBridge.extension;
 using System.ServiceModel.Channels;
 using System.Configuration;
 using System.IO;
@@ -15,7 +15,7 @@ using System.Reflection;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
-namespace Lib.rpc
+namespace ServiceBridge.rpc
 {
     [ServiceContract]
     public interface IWcfIntercept

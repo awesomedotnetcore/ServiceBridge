@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.distributed.zookeeper.watcher
+namespace ServiceBridge.distributed.zookeeper.watcher
 {
     public class ReconnectionWatcher : Watcher
     {

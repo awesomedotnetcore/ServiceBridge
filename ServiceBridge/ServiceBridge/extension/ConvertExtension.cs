@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
-using Lib.helper;
-using Lib.core;
+using ServiceBridge.helper;
+using ServiceBridge.core;
 using System.Collections.Specialized;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     public static class ConvertExtension
     {

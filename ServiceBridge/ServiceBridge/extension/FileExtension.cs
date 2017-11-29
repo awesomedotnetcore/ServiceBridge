@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.core;
-using Lib.helper;
+using ServiceBridge.core;
+using ServiceBridge.helper;
 using System.IO;
 using System.Drawing;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     public static class FileExtension
     {

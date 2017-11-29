@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using Lib.helper;
+using ServiceBridge.helper;
 using System.Collections;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     public static class CollectionExtension
     {

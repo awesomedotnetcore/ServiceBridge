@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using Lib.data;
+using ServiceBridge.data;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     /// <summary>
     /// BaseType是类

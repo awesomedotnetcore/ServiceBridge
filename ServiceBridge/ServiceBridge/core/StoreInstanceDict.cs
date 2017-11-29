@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.extension;
+using ServiceBridge.extension;
 
-namespace Lib.core
+namespace ServiceBridge.core
 {
     /// <summary>
     /// 存储实例

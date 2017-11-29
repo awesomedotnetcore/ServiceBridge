@@ -5,21 +5,21 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Threading;
 using org.apache.zookeeper;
-using Lib.extension;
-using Lib.helper;
-using Lib.data;
-using Lib.core;
+using ServiceBridge.extension;
+using ServiceBridge.helper;
+using ServiceBridge.data;
+using ServiceBridge.core;
 using System.Threading.Tasks;
 using static org.apache.zookeeper.ZooDefs;
 using org.apache.zookeeper.data;
 using System.Net;
 using System.Net.Http;
-using Lib.rpc;
-using Lib.distributed.zookeeper.watcher;
+using ServiceBridge.rpc;
+using ServiceBridge.distributed.zookeeper.watcher;
 using Polly;
 using System.Text;
 
-namespace Lib.distributed.zookeeper.ServiceManager
+namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
     /// <summary>
     /// 应该作为静态类

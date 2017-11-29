@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Drawing;
-using Lib.core;
+using ServiceBridge.core;
 using System.Globalization;
-using Lib.data;
+using ServiceBridge.data;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Lib.extension;
+using ServiceBridge.extension;
 using Newtonsoft.Json;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /*
      * https://github.com/arasatasaygin/is.js/blob/master/is.js

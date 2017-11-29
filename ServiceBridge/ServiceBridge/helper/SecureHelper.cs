@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     /// <summary>
     /// 安装帮助类

@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Reflection;
-using Lib.distributed.zookeeper;
+using ServiceBridge.distributed.zookeeper;
 using Polly;
-using Lib.rpc;
-using Lib.helper;
+using ServiceBridge.rpc;
+using ServiceBridge.helper;
 using org.apache.zookeeper;
-using Lib.extension;
+using ServiceBridge.extension;
 using System.ServiceModel;
 
-namespace Lib.distributed.zookeeper.ServiceManager
+namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
     /// <summary>
     /// 应该作为静态类

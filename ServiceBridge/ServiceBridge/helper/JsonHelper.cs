@@ -9,9 +9,9 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
-using Lib.core;
+using ServiceBridge.core;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     public static class JsonHelper
     {

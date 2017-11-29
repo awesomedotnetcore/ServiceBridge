@@ -1,12 +1,12 @@
-﻿using Lib.helper;
-using Lib.core;
+﻿using ServiceBridge.helper;
+using ServiceBridge.core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     public static class DictExtension
     {

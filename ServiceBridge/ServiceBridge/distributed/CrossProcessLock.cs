@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Lib.helper;
+using ServiceBridge.helper;
 
-namespace Lib.distributed
+namespace ServiceBridge.distributed
 {
     /// <summary>
     /// 使用Semaphore控制并发，SemaphoreSlim不能指定name，不能跨进程process控制并发

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lib.helper;
-using Lib.core;
+using ServiceBridge.helper;
+using ServiceBridge.core;
 
-namespace Lib.extension
+namespace ServiceBridge.extension
 {
     /// <summary>
     /// StringExtension

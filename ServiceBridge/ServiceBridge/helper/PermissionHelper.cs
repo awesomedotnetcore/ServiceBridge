@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.helper
+namespace ServiceBridge.helper
 {
     public enum PermissionExample : int
     {
