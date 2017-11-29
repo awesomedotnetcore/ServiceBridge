@@ -15,6 +15,9 @@ namespace ClientTest
             new Lazy<ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe>(() =>
             new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe("es.qipeilong.net:2181"));
 
+        /// <summary>
+        /// 定义一个客户端
+        /// </summary>
         class UserServiceClient : ServiceBridge.rpc.ServiceClient<Wcf.Contract.IUserService>
         {
             public UserServiceClient() : base(sub.Value.ResolveSvc<Wcf.Contract.IUserService>())
@@ -33,6 +36,7 @@ namespace ClientTest
                 try
                 {
                     System.Threading.Thread.Sleep(1000);
+                    //使用客户端调用，不用wcf相关配置
                     using (var client = new UserServiceClient())
                     {
                         var name = client.Instance.GetUserName("123");
@@ -44,6 +48,7 @@ namespace ClientTest
                     Console.WriteLine(e.Message);
                 }
             }
+            //取消监听
             sub.Value.Dispose();
         }
     }
