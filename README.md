@@ -6,3 +6,5 @@
 https://github.com/hiwjcn/hiwjcn/tree/master/Lib/distributed/zookeeper
 
 计划稳定后剥到这个项目中
+
+    Install-Package lib.com.ServiceBridge.nuget
