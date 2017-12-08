@@ -8,6 +8,7 @@ using ServiceBridge.extension;
 using System.Reflection;
 using System.ServiceModel.Description;
 using ServiceBridge.helper;
+using System.ServiceModel.Dispatcher;
 
 namespace ServiceBridge.rpc
 {
@@ -37,7 +38,11 @@ namespace ServiceBridge.rpc
             return data;
         }
 
-        public static void StartService(string base_url, params Assembly[] ass)
+        public static void StartService(string base_url, params Assembly[] ass) =>
+            StartService<MyMessageInspector>(base_url, ass);
+
+        public static void StartService<T>(string base_url, params Assembly[] ass)
+            where T : IClientMessageInspector, IDispatchMessageInspector, new()
         {
             if (ValidateHelper.IsPlumpList(_hosts)) { throw new Exception("服务已经启动"); }
 
@@ -58,6 +63,11 @@ namespace ServiceBridge.rpc
                         foreach (var c in contracts)
                         {
                             host.AddServiceEndpoint(c, new BasicHttpBinding(), c.Name);
+                        }
+
+                        foreach (var ep in host.Description.Endpoints)
+                        {
+                            ep.EndpointBehaviors.Add(new MyEndPointBehavior<T>());
                         }
 
                         var metaBehavior = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
