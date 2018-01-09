@@ -72,11 +72,6 @@ namespace ServiceBridge.rpc
             var rid = Com.GetUUID();
 
             // 插入验证信息
-            var request_id = MessageHeader.CreateHeader("rid", "rid", rid);
-            var hdUserName = MessageHeader.CreateHeader("u", "fuck", "admin");
-            var hdPassWord = MessageHeader.CreateHeader("p", "fuck", "123");
-            request.Headers.Add(hdUserName);
-            request.Headers.Add(hdPassWord);
 
             return request.ToString();
         }
@@ -84,18 +79,7 @@ namespace ServiceBridge.rpc
         object IDispatchMessageInspector.AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
             $"服务器端：接收到的请求:{request.ToString()}".AddBusinessInfoLog();
-
-            // 栓查验证信息  
-            var un = request.Headers.GetHeader<string>("u", "fuck");
-            var ps = request.Headers.GetHeader<string>("p", "fuck");
-            if (un == "admin" && ps == "abcd")
-            {
-                //
-            }
-            else
-            {
-                throw new Exception("验证失败，滚吧！");
-            }
+            
             return $"将被传入方法{nameof(IDispatchMessageInspector.BeforeSendReply)}的correlationState参数";
         }
 
