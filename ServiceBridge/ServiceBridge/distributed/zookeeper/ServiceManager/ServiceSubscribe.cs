@@ -56,7 +56,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                 //清理无用节点
                 AsyncHelper_.RunSync(() => this.ClearDeadNodes());
                 //读取节点并添加监视
-                AsyncHelper_.RunSync(() => this.NodeChildrenChanged(this._base_path));
+                AsyncHelper_.RunSync(() => this.WalkNodeAndWatch(this._base_path));
             }
             catch (Exception e)
             {
@@ -89,7 +89,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             }
         }
 
-        private async Task NodeChildrenChanged(string path)
+        private async Task WalkNodeAndWatch(string path)
         {
             try
             {
@@ -97,15 +97,10 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                 {
                     //qpl/wcf
                     var services = await this.Client.GetChildrenOrThrow_(path, this._children_watcher);
-                    foreach (var service in services)
+                    foreach (var service in services.Where(x => ValidateHelper.IsPlumpString(x)))
                     {
                         var service_path = path + "/" + service;
-                        var endpoints = await this.Client.GetChildrenOrThrow_(service_path, this._children_watcher);
-                        foreach (var endpoint in endpoints)
-                        {
-                            //处理节点
-                            await this.HandleEndpointNode(service_path + "/" + endpoint);
-                        }
+                        await this.WalkNodeAndWatch(service_path);
                     }
                 }
                 else if (this.IsServiceLevel(path))
@@ -115,7 +110,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                     foreach (var endpoint in endpoints)
                     {
                         //处理节点
-                        await this.HandleEndpointNode(path + "/" + endpoint);
+                        await this.GetEndpointData(path + "/" + endpoint);
                     }
                 }
                 else
@@ -129,20 +124,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             }
         }
 
-        private async Task HandleEndpointNode(string path)
-        {
-            if (!this.IsEndpointLevel(path)) { return; }
-            try
-            {
-                await EndpointDataChanged(path);
-            }
-            catch (Exception e)
-            {
-                e.AddErrorLog();
-            }
-        }
-
-        private async Task EndpointDataChanged(string path)
+        private async Task GetEndpointData(string path)
         {
             if (!this.IsEndpointLevel(path)) { return; }
             try
@@ -153,8 +135,12 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                     await this.Client.DeleteNodeRecursively_(path);
                     return;
                 }
-                var data = this._serializer.Deserialize<AddressModel>(bs);
-                if (!ValidateHelper.IsAllPlumpString(data?.ServiceNodeName, data?.EndpointNodeName, data?.Url)) { return; }
+                var data = this._serializer.Deserialize<AddressModel>(bs) ??
+                    throw new ArgumentNullException("address model");
+                if (!ValidateHelper.IsAllPlumpString(data.ServiceNodeName, data.EndpointNodeName, data.Url))
+                {
+                    throw new Exception($"address model数据错误:{data.ToJson()}");
+                }
                 var service_info = this.GetServiceAndEndpointNodeName(path);
                 data.ServiceNodeName = service_info.service_name;
                 data.EndpointNodeName = service_info.endpoint_name;
@@ -169,7 +155,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             }
         }
 
-        private async Task EndpointDeleted(string path)
+        private async Task DeleteEndpoint(string path)
         {
             if (!this.IsEndpointLevel(path)) { return; }
             var data = this.GetServiceAndEndpointNodeName(path);
@@ -196,6 +182,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             if (path_level < this._base_path_level || path_level > this._endpoint_path_level)
             {
                 $"节点无法被处理{path}".AddBusinessInfoLog();
+                return;
             }
 
             //Console.WriteLine($"节点事件：{path}:{event_type}");
@@ -204,17 +191,19 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             {
                 case Watcher.Event.EventType.NodeChildrenChanged:
                     //子节点发生更改
-                    await this.NodeChildrenChanged(path);
+                    await this.WalkNodeAndWatch(path);
                     break;
 
                 case Watcher.Event.EventType.NodeDataChanged:
                     //单个节点数据发生修改
-                    await this.EndpointDataChanged(path);
+                    await this.GetEndpointData(path);
                     break;
+
                 case Watcher.Event.EventType.NodeDeleted:
                     //单个节点被删除
-                    await this.EndpointDeleted(path);
+                    await this.DeleteEndpoint(path);
                     break;
+
                 default:
                     break;
             }
