@@ -76,8 +76,6 @@ namespace ServiceBridge.distributed.zookeeper
                             this._host,
                             (int)this._timeout.TotalMilliseconds,
                             this._connection_status_watcher);
-                        //等待连上
-                        this._client_lock.WaitOneOrThrow(TimeSpan.FromSeconds(30), "无法链接zk");
                     }
                 }
             }
@@ -98,7 +96,8 @@ namespace ServiceBridge.distributed.zookeeper
         {
             try
             {
-                this._client_lock.WaitOneOrThrow(timeout ?? TimeSpan.FromSeconds(30));
+                //等待连上
+                this._client_lock.WaitOneOrThrow(timeout ?? TimeSpan.FromSeconds(30), "无法链接zk");
 
                 if (this._client == null) { throw new Exception("zookeeper client is not prepared"); }
 
@@ -134,6 +133,7 @@ namespace ServiceBridge.distributed.zookeeper
             }
             catch (Exception e)
             {
+                this.OnError?.Invoke(e);
                 e.AddErrorLog();
             }
             finally
