@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="core\Lazy_.cs" />
     <Compile Include="core\StoreInstanceDict.cs" />
     <Compile Include="data\SerializeBase.cs" />
     <Compile Include="distributed\CrossProcessLock.cs" />
