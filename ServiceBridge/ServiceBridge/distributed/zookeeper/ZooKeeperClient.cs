@@ -107,13 +107,13 @@ namespace ServiceBridge.distributed.zookeeper
             {
                 this.OnError?.Invoke(e);
                 //链接断开
-                throw e;
+                throw new Exception("zk链接丢失", e);
             }
             catch (KeeperException.SessionExpiredException e)
             {
                 this.OnError?.Invoke(e);
                 //链接断开
-                throw e;
+                throw new Exception("zk会话丢失", e);
             }
             catch (Exception e)
             {
@@ -134,7 +134,7 @@ namespace ServiceBridge.distributed.zookeeper
             catch (Exception e)
             {
                 this.OnError?.Invoke(e);
-                e.AddErrorLog();
+                e.AddErrorLog("关闭zk客户端失败");
             }
             finally
             {

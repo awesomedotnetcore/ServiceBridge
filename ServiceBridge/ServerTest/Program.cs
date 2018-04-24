@@ -17,7 +17,7 @@ namespace ServerTest
             try
             {
                 ServiceBridge.rpc.ServiceHostManager.StartService("http://localhost:10000/", typeof(Program).Assembly);
-                reg = new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister("es.qipeilong.net:2181");
+                reg = new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister("es.qipeilong.net:2181", () => ServiceBridge.rpc.ServiceHostManager.GetContractInfo().Select(x => new ServiceBridge.distributed.zookeeper.ServiceManager.ContractModel(x.contract, x.url)).ToList());
 
                 Console.WriteLine("服务已经启动，按任意键退出");
                 Console.ReadLine();
