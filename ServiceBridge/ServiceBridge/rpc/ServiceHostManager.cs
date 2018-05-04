@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ServiceBridge.core;
 using ServiceBridge.extension;
-using System.Reflection;
-using System.ServiceModel.Description;
 using ServiceBridge.helper;
-using System.ServiceModel.Dispatcher;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 
 namespace ServiceBridge.rpc
 {
@@ -17,9 +14,34 @@ namespace ServiceBridge.rpc
     /// </summary>
     public static class ServiceHostManager
     {
-        private static readonly List<ServiceHost> _hosts = new List<ServiceHost>();
+        private static readonly Lazy_<ServiceHostContainer> _lazy =
+            new Lazy_<ServiceHostContainer>(() => new ServiceHostContainer());
 
-        public static List<(Type contract, string url)> GetContractInfo()
+        public static ServiceHostContainer Host => _lazy.Value;
+
+        public static bool StartService(string base_url, params Assembly[] ass) =>
+            _lazy.Value.StartService(base_url, ass);
+
+        public static void DisposeService()
+        {
+            if (_lazy.IsValueCreated)
+            {
+                lock (_lazy)
+                {
+                    if (_lazy.IsValueCreated)
+                    {
+                        _lazy.Value.Dispose();
+                    }
+                }
+            }
+        }
+    }
+
+    public class ServiceHostContainer : IDisposable
+    {
+        private readonly List<ServiceHost> _hosts = new List<ServiceHost>();
+
+        public List<(Type contract, string url)> GetContractInfo()
         {
             var data = new List<(Type contract, string url)>();
 
@@ -38,11 +60,7 @@ namespace ServiceBridge.rpc
             return data;
         }
 
-        public static void StartService(string base_url, params Assembly[] ass) =>
-            StartService<MyMessageInspector>(base_url, ass);
-
-        public static void StartService<T>(string base_url, params Assembly[] ass)
-            where T : IClientMessageInspector, IDispatchMessageInspector, new()
+        public bool StartService(string base_url, params Assembly[] ass)
         {
             if (ValidateHelper.IsPlumpList(_hosts)) { throw new Exception("服务已经启动"); }
 
@@ -63,11 +81,6 @@ namespace ServiceBridge.rpc
                         foreach (var c in contracts)
                         {
                             host.AddServiceEndpoint(c, new BasicHttpBinding(), c.Name);
-                        }
-
-                        foreach (var ep in host.Description.Endpoints)
-                        {
-                            ep.EndpointBehaviors.Add(new MyEndPointBehavior<T>());
                         }
 
                         var metaBehavior = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
@@ -107,15 +120,16 @@ namespace ServiceBridge.rpc
                         _hosts.Add(host);
                     }
                 }
+                return ValidateHelper.IsPlumpList(_hosts);
             }
             catch (Exception e)
             {
-                DisposeService();
+                this.Dispose();
                 throw new Exception("一个或多个服务启动失败，已经销毁所有已经启动的服务", e);
             }
         }
 
-        public static void DisposeService()
+        public void Dispose()
         {
             lock (_hosts)
             {
