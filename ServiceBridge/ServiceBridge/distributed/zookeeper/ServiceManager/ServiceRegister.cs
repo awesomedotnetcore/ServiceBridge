@@ -1,17 +1,9 @@
-﻿using System;
+﻿using org.apache.zookeeper;
+using ServiceBridge.helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Reflection;
-using ServiceBridge.distributed.zookeeper;
-using Polly;
-using ServiceBridge.rpc;
-using ServiceBridge.helper;
-using org.apache.zookeeper;
-using ServiceBridge.extension;
-using System.ServiceModel;
 
 namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
@@ -20,14 +12,11 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
     /// </summary>
     public class ServiceRegister : ServiceManageBase
     {
-        private readonly string _node_id;
         private readonly Func<List<ContractModel>> _contracts;
 
         public ServiceRegister(string host, Func<List<ContractModel>> _contracts) : base(host)
         {
             this._contracts = _contracts ?? throw new ArgumentNullException(nameof(_contracts));
-
-            this._node_id = this.Client.getSessionId().ToString();
 
             this.Retry().Execute(() => this.Reg());
             this.OnRecconected += () => this.Reg();
@@ -37,17 +26,14 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
 
         private async Task RegisterService()
         {
-            var list = new List<AddressModel>();
-            foreach (var m in this._contracts.Invoke())
+            var _node_id = this.Client.getSessionId().ToString();
+
+            var list = this._contracts.Invoke().Select(x => new AddressModel()
             {
-                var model = new AddressModel()
-                {
-                    Url = m.Url,
-                    ServiceNodeName = ServiceManageHelper.ParseServiceName(m.Contract),
-                    EndpointNodeName = ServiceManageHelper.EndpointNodeName(this._node_id),
-                };
-                list.Add(model);
-            }
+                Url = x.Url,
+                ServiceNodeName = ServiceManageHelper.ParseServiceName(x.Contract),
+                EndpointNodeName = ServiceManageHelper.EndpointNodeName(_node_id),
+            }).ToList();
 
             foreach (var m in list)
             {
