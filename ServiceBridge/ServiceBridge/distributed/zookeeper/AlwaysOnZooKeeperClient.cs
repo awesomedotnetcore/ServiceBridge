@@ -1,21 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.Threading;
-using org.apache.zookeeper;
-using ServiceBridge.extension;
-using ServiceBridge.helper;
-using ServiceBridge.data;
-using ServiceBridge.core;
-using System.Threading.Tasks;
-using static org.apache.zookeeper.ZooDefs;
-using org.apache.zookeeper.data;
-using System.Net;
-using System.Net.Http;
-using ServiceBridge.rpc;
-using ServiceBridge.distributed.zookeeper.watcher;
 
 namespace ServiceBridge.distributed.zookeeper
 {
@@ -25,17 +8,21 @@ namespace ServiceBridge.distributed.zookeeper
 
         public AlwaysOnZooKeeperClient(string host) : base(host)
         {
-            this.OnUnConnected += () => this.ReConnect();
+            //只有session过期才重新创建client，否则等待client自动尝试重连
+            this.OnSessionExpired += () => this.ReConnect();
         }
 
         protected virtual void ReConnect()
         {
-            //销毁的时候取消重试链接
-            if (this.IsDisposing) { return; }
+            if (this.IsDisposing)
+            {
+                //销毁的时候取消重试链接
+                return;
+            }
 
             this.CloseClient();
             this.CreateClient();
-            this.OnRecconected.Invoke();
+            this.OnRecconected?.Invoke();
         }
 
         public override void Dispose()

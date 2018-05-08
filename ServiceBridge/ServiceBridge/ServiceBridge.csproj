@@ -75,6 +75,7 @@
     <Compile Include="distributed\zookeeper\ServiceManager\ServiceSubscribe.cs" />
     <Compile Include="distributed\zookeeper\ServiceManager\ServiceSubscribeBase.cs" />
     <Compile Include="distributed\zookeeper\watcher\CallBackWatcher.cs" />
+    <Compile Include="distributed\zookeeper\watcher\ConnectionStatusWatcher.cs" />
     <Compile Include="distributed\zookeeper\watcher\EmptyWatcher.cs" />
     <Compile Include="distributed\zookeeper\watcher\NodeMonitorWatcher.cs" />
     <Compile Include="distributed\zookeeper\watcher\ReconnectionWatcher.cs" />
