@@ -13,7 +13,7 @@ namespace ClientTest
     {
         private static readonly Lazy<ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe> sub =
             new Lazy<ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe>(() =>
-            new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe("es.qipeilong.net:2181"));
+            new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceSubscribe("***:2181"));
 
         /// <summary>
         /// 定义一个客户端
