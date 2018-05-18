@@ -1,6 +1,10 @@
 # ServiceBridge
 基于zookeeper的服务注册/发现/负载均衡
 
+`1-服务端自动上报调用地址，客户端自动发现调用地址，从此WCF不用配置一行配置文件，也不用添加web引用。`
+
+`2-多台服务器上线还可以实现基于权重的负载均衡。`
+
 目前代码在lib项目中：
 
 https://github.com/hiwjcn/hiwjcn/tree/master/Lib/distributed/zookeeper
