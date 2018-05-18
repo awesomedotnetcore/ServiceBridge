@@ -4,7 +4,10 @@ namespace ServiceBridge.distributed.zookeeper
 {
     public class AlwaysOnZooKeeperClient : ZooKeeperClient
     {
-        public event Action OnRecconected;
+        /// <summary>
+        /// 尝试再次链接，也许还没连上
+        /// </summary>
+        public event Action OnRecconecting;
 
         public AlwaysOnZooKeeperClient(string host) : base(host)
         {
@@ -22,7 +25,7 @@ namespace ServiceBridge.distributed.zookeeper
 
             this.CloseClient();
             this.CreateClient();
-            this.OnRecconected?.Invoke();
+            this.OnRecconecting?.Invoke();
         }
 
         public override void Dispose()

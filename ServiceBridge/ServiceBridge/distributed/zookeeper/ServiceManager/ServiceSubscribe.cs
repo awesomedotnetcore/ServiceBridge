@@ -1,23 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.Threading;
-using org.apache.zookeeper;
+﻿using org.apache.zookeeper;
+using ServiceBridge.distributed.zookeeper.watcher;
 using ServiceBridge.extension;
 using ServiceBridge.helper;
-using ServiceBridge.data;
-using ServiceBridge.core;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using static org.apache.zookeeper.ZooDefs;
-using org.apache.zookeeper.data;
-using System.Net;
-using System.Net.Http;
-using ServiceBridge.rpc;
-using ServiceBridge.distributed.zookeeper.watcher;
-using Polly;
-using System.Text;
 
 namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
@@ -42,8 +29,10 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                 return this.WatchNodeChanges(e);
             });
 
-            this.Init();
+            //链接上了就获取服务信息
             this.OnConnected += () => this.Init();
+            //打开链接
+            this.CreateClient();
         }
 
         /// <summary>
@@ -54,21 +43,29 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             try
             {
                 //清理无用节点
-                AsyncHelper_.RunSync(() => this.ClearDeadNodes());
+                Task.Factory.StartNew(async () =>
+                {
+                    await this.RetryAsync().ExecuteAsync(async () => await this.ClearDeadNodes());
+                }).Wait();
             }
             catch (Exception e)
             {
-                throw new Exception("清理无用节点失败", e);
+                var err = new Exception("清理无用节点失败", e);
+                err.AddErrorLog();
             }
 
             try
             {
                 //读取节点并添加监视
-                AsyncHelper_.RunSync(() => this.WalkNodeAndWatch(this._base_path));
+                Task.Factory.StartNew(async () =>
+                {
+                    await this.RetryAsync().ExecuteAsync(async () => await this.WalkNodeAndWatch(this._base_path));
+                }).Wait();
             }
             catch (Exception e)
             {
-                throw new Exception("订阅服务节点失败", e);
+                var err = new Exception("订阅服务节点失败", e);
+                err.AddErrorLog();
             }
         }
 

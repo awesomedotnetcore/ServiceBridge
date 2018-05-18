@@ -1,21 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.Threading;
-using org.apache.zookeeper;
-using ServiceBridge.extension;
-using ServiceBridge.helper;
-using ServiceBridge.data;
-using ServiceBridge.core;
-using System.Threading.Tasks;
-using static org.apache.zookeeper.ZooDefs;
-using org.apache.zookeeper.data;
-using System.Net;
-using System.Net.Http;
-using ServiceBridge.rpc;
+﻿using org.apache.zookeeper;
 using ServiceBridge.distributed.zookeeper.watcher;
+using ServiceBridge.extension;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ServiceBridge.distributed.zookeeper
 {
@@ -30,13 +18,29 @@ namespace ServiceBridge.distributed.zookeeper
         protected readonly string _host;
         protected readonly TimeSpan _timeout;
         protected readonly Watcher _connection_status_watcher;
-        //lock
+        //zk是否可用的信号量
         private readonly ManualResetEvent _client_lock = new ManualResetEvent(false);
+        //创建zk的锁
         private readonly object _create_client_lock = new object();
-        //event
+
+        /// <summary>
+        /// 链接成功
+        /// </summary>
         public event Action OnConnected;
+
+        /// <summary>
+        /// 链接丢失，zk将自动重试链接
+        /// </summary>
         public event Action OnUnConnected;
+
+        /// <summary>
+        /// session过期，zk将放弃链接
+        /// </summary>
         public event Action OnSessionExpired;
+
+        /// <summary>
+        /// 捕获到异常
+        /// </summary>
         public event Action<Exception> OnError;
 
         public ZooKeeperClient(ZooKeeperConfigSection configuration) :
@@ -92,11 +96,11 @@ namespace ServiceBridge.distributed.zookeeper
                 }
             });
 
-            //connect
-            this.CreateClient();
+            //这里注释掉，让用户手动调用
+            //this.CreateClient();
         }
 
-        protected virtual void CreateClient()
+        public virtual void CreateClient()
         {
             if (this._client == null)
             {
@@ -149,7 +153,7 @@ namespace ServiceBridge.distributed.zookeeper
             }
         }
 
-        protected virtual void CloseClient()
+        public virtual void CloseClient()
         {
             try
             {
@@ -165,6 +169,8 @@ namespace ServiceBridge.distributed.zookeeper
             }
             finally
             {
+                //关闭信号
+                this._client_lock.Reset();
                 this._client = null;
             }
         }

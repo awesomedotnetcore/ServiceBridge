@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceBridge.distributed;
-using ServiceBridge.distributed.zookeeper;
-using System.Reflection;
-using ServiceBridge.extension;
-using Polly;
-using ServiceBridge.core;
+﻿using Polly;
 using ServiceBridge.data;
-using ServiceBridge.helper;
+using ServiceBridge.extension;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ServiceBridge.distributed.zookeeper.ServiceManager
 {
@@ -42,23 +35,25 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             this._service_path_level = this._base_path_level + 1;
             this._endpoint_path_level = this._service_path_level + 1;
 
-            try
-            {
-                this.Retry().Execute(() => this.InitBasePath());
-            }
-            catch (Exception e)
-            {
-                throw new Exception("尝试创建服务注册base path失败", e);
-            }
+            //链接上了初始化root目录
+            this.OnConnected += () => this.InitBasePath();
         }
 
         protected void InitBasePath()
         {
-            var client = this.GetClientManager();
-            Task.Factory.StartNew(async () =>
+            try
             {
-                await client.EnsurePath(this._base_path);
-            }).Wait();
+                var client = this.GetClientManager();
+                Task.Factory.StartNew(async () =>
+                {
+                    await this.RetryAsync().ExecuteAsync(async () => await client.EnsurePath(this._base_path));
+                }).Wait();
+            }
+            catch (Exception e)
+            {
+                var err = new Exception("尝试创建服务注册base path失败", e);
+                err.AddErrorLog();
+            }
         }
 
         protected Policy Retry() => ServiceManageHelper.RetryPolicy();

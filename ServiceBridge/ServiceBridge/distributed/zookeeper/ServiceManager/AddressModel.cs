@@ -20,6 +20,8 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
         public virtual string Url { get; set; }
 
         public virtual int Weight { get; set; } = 1;
+
+        public virtual DateTime? UpdateTime { get; set; }
     }
 
     /// <summary>
