@@ -25,12 +25,16 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             var list = this._endpoints.Where(x => x.ServiceNodeName == name).ToList();
             if (ValidateHelper.IsPlumpList(list))
             {
-                var theone = this._ran.Choice(list) ??
-                    throw new Exception("server information is empty");
-                //根据权重选择
-                //this._ran.ChoiceByWeight(list, x => x.Weight);
-                this.OnServerSelected?.Invoke(theone);
-                return theone;
+                //这里用thread local比较好，一个线程共享一个随机对象
+                lock (this._ran)
+                {
+                    var theone = this._ran.Choice(list) ??
+                        throw new Exception("server information is empty");
+                    //根据权重选择
+                    //this._ran.ChoiceByWeight(list, x => x.Weight);
+                    this.OnServerSelected?.Invoke(theone);
+                    return theone;
+                }
             }
             return null;
         }
