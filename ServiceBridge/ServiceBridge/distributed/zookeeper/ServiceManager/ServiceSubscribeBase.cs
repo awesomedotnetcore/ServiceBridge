@@ -12,7 +12,9 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
     {
         protected readonly List<AddressModel> _endpoints = new List<AddressModel>();
         protected readonly Random _ran = new Random((int)DateTime.Now.Ticks);
-        
+
+        public event Action<AddressModel> OnServerSelected;
+
         public ServiceSubscribeBase(string host) : base(host) { }
 
         public IReadOnlyList<AddressModel> AllService() => this._endpoints.AsReadOnly();
@@ -23,11 +25,11 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             var list = this._endpoints.Where(x => x.ServiceNodeName == name).ToList();
             if (ValidateHelper.IsPlumpList(list))
             {
-                var theone = this._ran.Choice(list);
-                //
+                var theone = this._ran.Choice(list) ??
+                    throw new Exception("server information is empty");
                 //根据权重选择
                 //this._ran.ChoiceByWeight(list, x => x.Weight);
-                Console.WriteLine($"选择了地址：{theone.Url}");
+                this.OnServerSelected?.Invoke(theone);
                 return theone;
             }
             return null;
