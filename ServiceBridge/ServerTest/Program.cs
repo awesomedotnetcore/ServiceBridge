@@ -16,8 +16,9 @@ namespace ServerTest
             ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister reg = null;
             try
             {
-                ServiceBridge.rpc.ServiceHostManager.StartService("http://localhost:10000/", typeof(Program).Assembly);
-                reg = new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister("***:2181", () => ServiceBridge.rpc.ServiceHostManager.Host.GetContractInfo().Select(x => new ServiceBridge.distributed.zookeeper.ServiceManager.ContractModel(x.contract, x.url)).ToList());
+                ServiceBridge.rpc.ServiceHostManager.Host.StartService("http://localhost:10000/", typeof(Program).Assembly);
+                reg = new ServiceBridge.distributed.zookeeper.ServiceManager.ServiceRegister("***:2181",
+                    () => ServiceBridge.rpc.ServiceHostManager.Host.GetContractInfo());
 
                 Console.WriteLine("服务已经启动，按任意键退出");
                 Console.ReadLine();
@@ -29,7 +30,7 @@ namespace ServerTest
             finally
             {
                 reg?.Dispose();
-                ServiceBridge.rpc.ServiceHostManager.DisposeService();
+                ServiceBridge.rpc.ServiceHostManager.Host.Dispose();
             }
         }
     }

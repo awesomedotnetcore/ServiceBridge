@@ -1,4 +1,5 @@
-﻿using ServiceBridge.extension;
+﻿using ServiceBridge.distributed.zookeeper.ServiceManager;
+using ServiceBridge.extension;
 using ServiceBridge.helper;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,9 @@ namespace ServiceBridge.rpc
         //host container
         private readonly List<ServiceHost> _hosts = new List<ServiceHost>();
 
-        public List<(Type contract, string url)> GetContractInfo()
+        public List<ContractModel> GetContractInfo()
         {
-            var data = new List<(Type contract, string url)>();
+            var data = new List<ContractModel>();
 
             foreach (var host in this._hosts)
             {
@@ -37,7 +38,7 @@ namespace ServiceBridge.rpc
                     var u = ep.Address?.Uri?.AbsoluteUri;
                     if (c == null || !ValidateHelper.IsPlumpString(u)) { continue; }
 
-                    data.Add((c, u));
+                    data.Add(new ContractModel(c, u));
                 }
             }
 
