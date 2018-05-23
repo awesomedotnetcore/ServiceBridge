@@ -32,9 +32,9 @@ namespace ServiceBridge.rpc
             this(new BasicHttpBinding()
             {
                 MaxBufferSize = (ConfigurationManager.AppSettings["WCF.MaxBufferSize"] ?? "2147483647").ToInt(null),
-                MaxReceivedMessageSize = (ConfigurationManager.AppSettings["WCF.MaxBufferSize"] ?? "2147483647").ToInt(null),
-                ReceiveTimeout = TimeSpan.FromSeconds((ConfigurationManager.AppSettings["WCF.ReceiveTimeoutSecond"] ?? "20").ToInt(null)),
-                SendTimeout = TimeSpan.FromSeconds((ConfigurationManager.AppSettings["WCF.SendTimeoutSecond"] ?? "20").ToInt(null))
+                MaxReceivedMessageSize = (ConfigurationManager.AppSettings["WCF.MaxReceivedMessageSize"] ?? "2147483647").ToInt(null),
+                ReceiveTimeout = TimeSpan.FromSeconds((ConfigurationManager.AppSettings["WCF.ReceiveTimeoutSecond"] ?? "30").ToInt(null)),
+                SendTimeout = TimeSpan.FromSeconds((ConfigurationManager.AppSettings["WCF.SendTimeoutSecond"] ?? "30").ToInt(null))
             }, new EndpointAddress(url))
         {
             //with default config

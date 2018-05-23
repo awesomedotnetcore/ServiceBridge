@@ -114,6 +114,7 @@
     <Compile Include="rpc\ServiceClient.cs" />
     <Compile Include="rpc\ServiceClientExtension.cs" />
     <Compile Include="rpc\ServiceCore.cs" />
+    <Compile Include="rpc\ServiceHostContainer.cs" />
     <Compile Include="rpc\ServiceHostManager.cs" />
     <Compile Include="rpc\WcfInterception.cs" />
     <Compile Include="rpc\WebApiHelper.cs" />
