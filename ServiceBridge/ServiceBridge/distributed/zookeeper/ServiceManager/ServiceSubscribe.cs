@@ -67,6 +67,8 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                 var err = new Exception("订阅服务节点失败", e);
                 err.AddErrorLog();
             }
+
+            this._client_ready.Set();
         }
 
         /// <summary>
