@@ -20,14 +20,18 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
 
         public ServiceSubscribeBase(string host) : base(host) { }
 
-        public IReadOnlyList<AddressModel> AllService() => this._endpoints.AsReadOnly();
-
-        public AddressModel Resolve<T>(TimeSpan timeout)
+        public IReadOnlyList<AddressModel> AllService(TimeSpan? timeout = null)
         {
-            this._client_ready.WaitOneOrThrow(timeout, $"超时：{timeout}，客户端尚未完成服务订阅");
+            var to = timeout ?? TimeSpan.FromSeconds(20);
 
+            this._client_ready.WaitOneOrThrow(to, $"超时：{to}，客户端尚未完成服务订阅");
+            return this._endpoints.AsReadOnly();
+        }
+
+        public AddressModel Resolve<T>(TimeSpan? timeout = null)
+        {
             var name = ServiceManageHelper.ParseServiceName<T>();
-            var list = this._endpoints.Where(x => x.ServiceNodeName == name).ToList();
+            var list = this.AllService(timeout: timeout).Where(x => x.ServiceNodeName == name).ToList();
             if (ValidateHelper.IsPlumpList(list))
             {
                 //这里用thread local比较好，一个线程共享一个随机对象
@@ -44,7 +48,6 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             return null;
         }
 
-        public string ResolveSvc<T>(TimeSpan? timeout = null) =>
-            this.Resolve<T>(timeout ?? TimeSpan.FromSeconds(20))?.Url;
+        public string ResolveSvc<T>(TimeSpan? timeout = null) => this.Resolve<T>(timeout)?.Url;
     }
 }

@@ -16,7 +16,8 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
         private readonly Watcher _children_watcher;
         private readonly Watcher _node_watcher;
 
-        public event Action OnServiceChanged;
+        public event Func<Task> OnServiceChangedAsync;
+        public event Func<Task> OnSubscribeFinishedAsync;
 
         public ServiceSubscribe(string host) : base(host)
         {
@@ -30,7 +31,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             });
 
             //链接上了就获取服务信息
-            this.OnConnected += () => this.Init();
+            this.OnConnectedAsync += this.Init;
             //打开链接
             this.CreateClient();
         }
@@ -38,15 +39,13 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
         /// <summary>
         /// 初始化
         /// </summary>
-        private void Init()
+        public async Task Init()
         {
             try
             {
                 //清理无用节点
-                Task.Factory.StartNew(async () =>
-                {
-                    await this.RetryAsync().ExecuteAsync(async () => await this.ClearDeadNodes());
-                }).Wait();
+                await this.RetryAsync().ExecuteAsync(async () =>
+                await this.ClearDeadNodes());
             }
             catch (Exception e)
             {
@@ -57,10 +56,8 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             try
             {
                 //读取节点并添加监视
-                Task.Factory.StartNew(async () =>
-                {
-                    await this.RetryAsync().ExecuteAsync(async () => await this.WalkNodeAndWatch(this._base_path));
-                }).Wait();
+                await this.RetryAsync().ExecuteAsync(async () =>
+                await this.WalkNodeAndWatch(this._base_path));
             }
             catch (Exception e)
             {
@@ -68,6 +65,9 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                 err.AddErrorLog();
             }
 
+            //订阅完成
+            if (this.OnSubscribeFinishedAsync != null) { await this.OnSubscribeFinishedAsync.Invoke(); }
+            //订阅完成
             this._client_ready.Set();
         }
 
@@ -154,7 +154,8 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
 
                 this._endpoints.RemoveWhere_(x => x.FullPathName == data.FullPathName);
                 this._endpoints.Add(data);
-                this.OnServiceChanged?.Invoke();
+
+                if (this.OnServiceChangedAsync != null) { await this.OnServiceChangedAsync.Invoke(); }
             }
             catch (Exception e)
             {
@@ -170,7 +171,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             this._endpoints.RemoveWhere_(
                 x => x.ServiceNodeName == data.service_name && x.EndpointNodeName == data.endpoint_name);
 
-            this.OnServiceChanged?.Invoke();
+            if (this.OnServiceChangedAsync != null) { await this.OnServiceChangedAsync.Invoke(); }
 
             await Task.FromResult(1);
         }

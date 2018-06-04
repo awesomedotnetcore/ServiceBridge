@@ -36,18 +36,15 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             this._endpoint_path_level = this._service_path_level + 1;
 
             //链接上了初始化root目录
-            this.OnConnected += () => this.InitBasePath();
+            this.OnConnectedAsync += this.InitBasePath;
         }
 
-        protected void InitBasePath()
+        protected async Task InitBasePath()
         {
             try
             {
                 var client = this.GetClientManager();
-                Task.Factory.StartNew(async () =>
-                {
-                    await this.RetryAsync().ExecuteAsync(async () => await client.EnsurePath(this._base_path));
-                }).Wait();
+                await this.RetryAsync().ExecuteAsync(async () => await client.EnsurePath(this._base_path));
             }
             catch (Exception e)
             {

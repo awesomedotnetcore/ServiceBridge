@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceBridge.distributed.zookeeper.ServiceManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,24 +29,15 @@ namespace ClientTest
         {
             foreach (var i in ServiceBridge.helper.Com.Range(100))
             {
-                while (sub.Value.Resolve<Wcf.Contract.IUserService>() == null)
+                using (var con = new ServiceSubscribe("es.qipeilong.net:2181"))
                 {
-                    System.Threading.Thread.Sleep(1000);
-                    Console.WriteLine("等待服务上线");
-                }
-                try
-                {
-                    System.Threading.Thread.Sleep(1000);
-                    //使用客户端调用，不用wcf相关配置
-                    using (var client = new UserServiceClient())
+                    con.OnSubscribeFinishedAsync += async () =>
                     {
-                        var name = client.Instance.GetUserName("123");
-                        Console.WriteLine($"服务返回数据：{name}");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
+                        Console.WriteLine("订阅完成");
+                        await Task.FromResult(1);
+                    };
+                    con.ResolveSvc<Wcf.Contract.IUserService>();
+                    Console.WriteLine("订阅服务" + con.AllService().Count());
                 }
             }
             //取消监听

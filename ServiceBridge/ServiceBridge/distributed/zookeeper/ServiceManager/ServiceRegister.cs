@@ -20,19 +20,16 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             this._contracts = _contracts ?? throw new ArgumentNullException(nameof(_contracts));
 
             //链接成功后调用注册
-            this.OnConnected += () => this.Reg();
+            this.OnConnectedAsync += this.Reg;
             //尝试打开链接
             this.CreateClient();
         }
 
-        public void Reg()
+        public async Task Reg()
         {
             try
             {
-                Task.Factory.StartNew(async () =>
-                {
-                    await this.RetryAsync().ExecuteAsync(async () => await this.RegisterService());
-                }).Wait();
+                await this.RetryAsync().ExecuteAsync(async () => await this.RegisterService());
             }
             catch (Exception e)
             {

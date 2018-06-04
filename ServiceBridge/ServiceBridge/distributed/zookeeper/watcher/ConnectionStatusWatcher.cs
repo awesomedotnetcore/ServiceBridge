@@ -6,9 +6,9 @@ namespace ServiceBridge.distributed.zookeeper.watcher
 {
     public class ConnectionStatusWatcher : Watcher
     {
-        private readonly Action<Event.KeeperState> _status_changed;
+        private readonly Func<Event.KeeperState, Task> _status_changed;
 
-        public ConnectionStatusWatcher(Action<Event.KeeperState> _status_changed)
+        public ConnectionStatusWatcher(Func<Event.KeeperState, Task> _status_changed)
         {
             this._status_changed = _status_changed ?? throw new ArgumentNullException(nameof(_status_changed));
         }
@@ -17,7 +17,7 @@ namespace ServiceBridge.distributed.zookeeper.watcher
         {
             var status = watchedEvent.getState();
 
-            this._status_changed.Invoke(status);
+            await this._status_changed.Invoke(status);
 
             await Task.FromResult(1);
         }
