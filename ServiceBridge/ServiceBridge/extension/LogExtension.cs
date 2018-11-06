@@ -149,7 +149,7 @@ namespace ServiceBridge.extension
             {
                 var week = DateTimeHelper.GetWeek(now);
 
-                return $"【{now.ToDateTimeString()}】-【{week}】";
+                return $"【{now}】-【{week}】";
             }
             catch
             {

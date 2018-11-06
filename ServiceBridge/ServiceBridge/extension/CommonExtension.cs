@@ -49,7 +49,7 @@ namespace ServiceBridge.extension
         /// <returns></returns>
         public static T Choice<T>(this Random ran, IList<T> list)
         {
-            return ran.ChoiceIndexAndItem(list).item;
+            return ran.ChoiceIndexAndItem(list).Item2;
         }
 
         /// <summary>
@@ -59,12 +59,12 @@ namespace ServiceBridge.extension
         /// <param name="ran"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static (int index, T item) ChoiceIndexAndItem<T>(this Random ran, IList<T> list)
+        public static Tuple<int, T> ChoiceIndexAndItem<T>(this Random ran, IList<T> list)
         {
             //The maxValue for the upper-bound in the Next() method is exclusive—
             //the range includes minValue, maxValue-1, and all numbers in between.
             var index = ran.RealNext(minValue: 0, maxValue: list.Count - 1);
-            return (index, list[index]);
+            return Tuple.Create(index, list[index]);
         }
 
         /// <summary>
@@ -104,8 +104,8 @@ namespace ServiceBridge.extension
         public static T PopChoice<T>(this Random ran, ref List<T> list)
         {
             var data = ran.ChoiceIndexAndItem(list);
-            list.RemoveAt(data.index);
-            return data.item;
+            list.RemoveAt(data.Item1);
+            return data.Item2;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace ServiceBridge.extension
             var total_weight = source.Sum(x => selector.Invoke(x));
 
             var weight = ran.RealNext(total_weight - 1);
-            
+
             var cur = 0;
 
             foreach (var s in source)

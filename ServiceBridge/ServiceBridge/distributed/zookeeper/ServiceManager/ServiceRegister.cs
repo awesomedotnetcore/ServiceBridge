@@ -29,7 +29,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
         {
             try
             {
-                await this.RetryAsync().ExecuteAsync(async () => await this.RegisterService());
+                await this.RetryAsync(async () => await this.RegisterService());
             }
             catch (Exception e)
             {

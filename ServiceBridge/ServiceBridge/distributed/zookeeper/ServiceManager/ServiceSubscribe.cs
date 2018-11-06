@@ -44,7 +44,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             try
             {
                 //清理无用节点
-                await this.RetryAsync().ExecuteAsync(async () =>
+                await this.RetryAsync(async () =>
                 await this.ClearDeadNodes());
             }
             catch (Exception e)
@@ -56,7 +56,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             try
             {
                 //读取节点并添加监视
-                await this.RetryAsync().ExecuteAsync(async () =>
+                await this.RetryAsync(async () =>
                 await this.WalkNodeAndWatch(this._base_path));
             }
             catch (Exception e)
@@ -148,9 +148,9 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
                 {
                     throw new Exception($"address model数据错误:{data.ToJson()}");
                 }
-                var service_info = this.GetServiceAndEndpointNodeName(path);
-                data.ServiceNodeName = service_info.service_name;
-                data.EndpointNodeName = service_info.endpoint_name;
+                this.GetServiceAndEndpointNodeName(path, out var service_name, out var endpoint_name);
+                data.ServiceNodeName = service_name;
+                data.EndpointNodeName = endpoint_name;
 
                 this._endpoints.RemoveWhere_(x => x.FullPathName == data.FullPathName);
                 this._endpoints.Add(data);
@@ -166,10 +166,9 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
         private async Task DeleteEndpoint(string path)
         {
             if (!this.IsEndpointLevel(path)) { return; }
-            var data = this.GetServiceAndEndpointNodeName(path);
+            this.GetServiceAndEndpointNodeName(path, out var service_name, out var endpoint_name);
 
-            this._endpoints.RemoveWhere_(
-                x => x.ServiceNodeName == data.service_name && x.EndpointNodeName == data.endpoint_name);
+            this._endpoints.RemoveWhere_(x => x.ServiceNodeName == service_name && x.EndpointNodeName == endpoint_name);
 
             if (this.OnServiceChangedAsync != null) { await this.OnServiceChangedAsync.Invoke(); }
 

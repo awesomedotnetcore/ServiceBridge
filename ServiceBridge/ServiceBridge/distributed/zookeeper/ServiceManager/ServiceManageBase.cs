@@ -1,5 +1,4 @@
-﻿using Polly;
-using ServiceBridge.data;
+﻿using ServiceBridge.data;
 using ServiceBridge.extension;
 using System;
 using System.Linq;
@@ -44,7 +43,7 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             try
             {
                 var client = this.GetClientManager();
-                await this.RetryAsync().ExecuteAsync(async () => await client.EnsurePath(this._base_path));
+                await this.RetryAsync(async () => await client.EnsurePath(this._base_path));
             }
             catch (Exception e)
             {
@@ -53,9 +52,23 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
             }
         }
 
-        protected Policy Retry() => ServiceManageHelper.RetryPolicy();
-
-        protected Policy RetryAsync() => ServiceManageHelper.RetryAsyncPolicy();
+        protected async Task RetryAsync(Func<Task> action)
+        {
+            var retry_count = 3;
+            while (true)
+            {
+                try
+                {
+                    await action.Invoke();
+                    break;
+                }
+                catch when (--retry_count > 0)
+                {
+                    //continue
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
+            }
+        }
 
         protected bool IsServiceRootLevel(string path) =>
             path.SplitZookeeperPath().Count == this._base_path_level;
@@ -66,14 +79,13 @@ namespace ServiceBridge.distributed.zookeeper.ServiceManager
         protected bool IsEndpointLevel(string path) =>
             path.SplitZookeeperPath().Count == this._endpoint_path_level;
 
-        protected (string service_name, string endpoint_name) GetServiceAndEndpointNodeName(string path)
+        protected void GetServiceAndEndpointNodeName(string path, out string service_name, out string endpoint_name)
         {
             if (!this.IsEndpointLevel(path)) { throw new Exception("只有终结点才能获取服务和节点信息"); }
 
             var data = path.SplitZookeeperPath().Reverse_();
-            var endpoint_name = data.Take(1).FirstOrDefault();
-            var service_name = data.Skip(1).Take(1).FirstOrDefault();
-            return (service_name, endpoint_name);
+            endpoint_name = data.Take(1).FirstOrDefault();
+            service_name = data.Skip(1).Take(1).FirstOrDefault();
         }
 
         public override void Dispose()

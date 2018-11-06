@@ -54,30 +54,5 @@ namespace ServiceBridge.extension
             }
             return deft;
         }
-
-        /// <summary>
-        /// 返回元祖
-        /// </summary>
-        /// <typeparam name="K"></typeparam>
-        /// <typeparam name="V"></typeparam>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public static IEnumerable<(K key, V value)> AsTupleEnumerable<K, V>(this IDictionary<K, V> dict)
-        {
-            foreach (var key in dict.Keys)
-            {
-                yield return (key, dict[key]);
-            }
-        }
-
-        static void fasd()
-        {
-            var dict = new Dictionary<string, string>();
-
-            foreach (var kv in dict.AsTupleEnumerable())
-            {
-                //
-            }
-        }
     }
 }

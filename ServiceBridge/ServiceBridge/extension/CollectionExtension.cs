@@ -12,38 +12,6 @@ namespace ServiceBridge.extension
     public static class CollectionExtension
     {
         /// <summary>
-        /// 更新集合，多删少补
-        /// </summary>
-        public static (IEnumerable<T> WaitForDelete, IEnumerable<T> WaitForAdd) UpdateList<T>(this IEnumerable<T> old_list,
-            IEnumerable<T> new_list, IEqualityComparer<T> comparer = null) =>
-            old_list.UpdateList(new_list, x => x, comparer);
-
-        /// <summary>
-        /// 更新集合，多删少补
-        /// </summary>
-        public static (IEnumerable<Target> WaitForDelete, IEnumerable<Target> WaitForAdd) UpdateList<T, Target>(this IEnumerable<T> old_list,
-            IEnumerable<T> new_list, Func<T, Target> selector, IEqualityComparer<Target> comparer = null)
-        {
-            new_list = new_list ?? throw new ArgumentNullException(nameof(new_list));
-            selector = selector ?? throw new ArgumentNullException(nameof(selector));
-
-            var delete_list = old_list.Select(selector).Except_(new_list.Select(selector), comparer);
-            var create_list = new_list.Select(selector).Except_(old_list.Select(selector), comparer);
-            return (delete_list, create_list);
-        }
-
-        /// <summary>
-        /// 转为可迭代实体
-        /// </summary>
-        public static IEnumerable<T> AsEnumerable_<T>(this IEnumerable collection)
-        {
-            foreach (T item in collection)
-            {
-                yield return item;
-            }
-        }
-
-        /// <summary>
         /// 移除
         /// </summary>
         public static void RemoveWhere_<T>(this List<T> list, Func<T, bool> where)
@@ -55,31 +23,6 @@ namespace ServiceBridge.extension
                 {
                     list.Remove(item);
                 }
-            }
-        }
-
-        /// <summary>
-        /// 获取两个集合的交集
-        /// </summary>
-        public static List<T> GetInterSection<T>(this IEnumerable<T> list, IEnumerable<T> data) =>
-            Com.GetInterSection(list, data);
-
-        /// <summary>
-        /// 除了（排除）
-        /// </summary>
-        public static IEnumerable<T> Except_<T>(this IEnumerable<T> list, IEnumerable<T> data,
-            IEqualityComparer<T> comparer = null)
-        {
-            //list.Except(data, comparer);
-
-            data = data ?? new List<T>() { };
-            if (comparer != null)
-            {
-                return list.Where(x => !data.Contains(x, comparer));
-            }
-            else
-            {
-                return list.Where(x => !data.Contains(x));
             }
         }
 

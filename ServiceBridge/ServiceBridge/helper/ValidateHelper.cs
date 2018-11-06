@@ -1,18 +1,9 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Drawing;
-using ServiceBridge.core;
-using System.Globalization;
-using ServiceBridge.data;
-using System.Reflection;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using ServiceBridge.extension;
-using Newtonsoft.Json;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ServiceBridge.helper
 {
@@ -412,16 +403,6 @@ namespace ServiceBridge.helper
         public static bool IsReferenceEquals(object obj1, object obj2)
         {
             return object.ReferenceEquals(obj1, obj2);
-        }
-
-        /// <summary>
-        /// 两个json有相同的结构
-        /// </summary>
-        /// <param name="tuple"></param>
-        /// <returns></returns>
-        public static bool SameJsonStructure(this (string, string) tuple)
-        {
-            return JsonHelper.HasSameStructure(tuple.Item1, tuple.Item2);
         }
     }
 }

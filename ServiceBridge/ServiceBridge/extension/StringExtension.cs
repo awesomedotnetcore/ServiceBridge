@@ -51,21 +51,6 @@ namespace ServiceBridge.extension
         }
 
         /// <summary>
-        /// 用@分割邮件地址
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        public static (string user_name, string host) SplitEmail(this string email)
-        {
-            var sp = email.Split('@');
-            if (sp.Length != 2 || !ValidateHelper.IsAllPlumpString(sp[0], sp[1]))
-            {
-                throw new Exception("邮件格式错误");
-            }
-            return (sp[0], sp[1]);
-        }
-
-        /// <summary>
         /// trim string
         /// </summary>
         public static string Trim_(this string str, string tm, bool ignore_case = true)
